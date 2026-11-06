@@ -101,7 +101,7 @@ import WebKit
         snapshots = SnapshotStore(directories: directories)
         favicons = FaviconStore(directories: directories)
         macTabs = MacTabsStore(
-            directories: directories, container: CKContainer(identifier: "iCloud.com.harunkkhan.browser"))
+            directories: directories, container: CKContainer.default())
 
         haptics.keepsWarm = { [unowned energy] in !energy.isReduced }
         favicons.allowsNetwork = { [unowned energy] in !energy.isReduced }

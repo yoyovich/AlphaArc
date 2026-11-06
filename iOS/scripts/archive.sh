@@ -33,7 +33,7 @@ archive=".build/Archives/SailBrowser-$build.xcarchive"
 mkdir -p .build/Archives
 rm -rf "$archive" .build/Export
 
-xcodegen generate --quiet
+xcodegen generate --quiet --spec "${SAIL_PROJECT_SPEC:-fork.yml}"
 status=0
 xcodebuild archive -project SailBrowser.xcodeproj -scheme SailBrowser \
   -configuration Release -destination generic/platform=iOS \
@@ -64,7 +64,12 @@ PATH=/usr/bin:/bin:/usr/sbin:/sbin xcodebuild -exportArchive -archivePath "$arch
   -exportOptionsPlist .build/ExportOptions.plist \
   -exportPath .build/Export -allowProvisioningUpdates "${auth[@]}" 2>&1 | tee .build/export.log
 
-ipa=$(ls .build/Export/*.ipa | head -1)
+ipas=(.build/Export/*.ipa)
+ipa="${ipas[0]}"
+if [ ! -f "$ipa" ]; then
+  echo "archive.sh: export did not produce an IPA" >&2
+  exit 1
+fi
 echo "archive.sh: build $build exported to $ipa"
 [ "$upload" = 1 ] || exit 0
 

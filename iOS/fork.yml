@@ -1,0 +1,15 @@
+# Personal settings layered over upstream; no Apple team or signing keys are committed.
+include:
+  - project.yml
+settings:
+  base:
+    SAIL_ICLOUD_CONTAINER: iCloud.com.yoyovich.sail
+targets:
+  SailBrowser:
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.yoyovich.sail
+  SailBrowserTests:
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.yoyovich.sail.tests

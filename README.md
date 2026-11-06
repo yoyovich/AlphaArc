@@ -1,3 +1,7 @@
+> **Personal fork preparation:** build with `iOS/fork.yml`. See [FORK.md](FORK.md) for setup and
+> [VERIFICATION.md](VERIFICATION.md) for completed checks and remaining limitations.
+> The TestFlight and release links below belong to upstream; this fork has no published iPhone build.
+
 <p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="brand/sailfish-logo-outline.svg">

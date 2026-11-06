@@ -76,7 +76,10 @@ def normalize(selector):
         if match.start() < i:
             continue
         name = ALIASES.get(match.group(1), match.group(1))
-        end = closing(selector, match.end() - 1)
+        try:
+            end = closing(selector, match.end() - 1)
+        except ValueError:
+            return None, None
         inner = selector[match.end():end]
         if name in ("has", "not", "is", "where", "nth-child", "nth-of-type", "nth-last-child", "nth-last-of-type"):
             inner, inner_kinds = normalize(inner)
@@ -94,21 +97,27 @@ def normalize(selector):
 
 
 def scriptlet_call(body):
+    if not body.startswith("//scriptlet(") or not body.endswith(")"):
+        return None
     text = body[len("//scriptlet("):-1]
     args, i = [], 0
     while i < len(text):
         quote = text[i]
         if quote in "\"'":
             j, value = i + 1, []
-            while text[j] != quote:
-                if text[j] == "\\" and text[j + 1] == quote:
+            while j < len(text) and text[j] != quote:
+                if text[j] == "\\" and j + 1 < len(text) and text[j + 1] == quote:
                     j += 1
                 value.append(text[j])
                 j += 1
+            if j == len(text):
+                return None
             args.append("".join(value))
             i = j + 1
         else:
             i += 1
+    if not args:
+        return None
     name = CANONICAL.get(args[0])
     return [name] + args[1:] if name else None
 
@@ -140,7 +149,10 @@ def main():
                     continue
                 kind, value = "scriptlets", call
             elif separator in ("#$#", "#$?#"):
-                brace = body.index("{")
+                brace = body.find("{")
+                if brace < 0:
+                    dropped["style"] += 1
+                    continue
                 selector, style = normalize(body[:brace].strip())
                 if selector is None or style or "remove:" in body[brace:].replace(" ", ""):
                     dropped["style"] += 1

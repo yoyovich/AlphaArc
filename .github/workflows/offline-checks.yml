@@ -1,0 +1,24 @@
+# These checks need no Apple SDK, credentials, or network calls to filter-list hosts.
+name: Offline checks
+on:
+  push:
+    branches: [main, "fork/**"]
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: offline-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  resources:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Validate bundled resources and script syntax
+        run: python3 iOS/scripts/validate-resources.py
+      - name: Test filter conversion edge cases
+        run: python3 -m unittest discover -s iOS/scripts/tests -v
+      - name: Lint shell scripts
+        run: shellcheck iOS/scripts/*.sh

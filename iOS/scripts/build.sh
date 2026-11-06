@@ -6,7 +6,7 @@ SIM="SailBrowser-$(basename "$(git rev-parse --show-toplevel)")"
 xcrun simctl list devices | grep -qF "    $SIM (" || xcrun simctl create "$SIM" "iPhone 17 Pro" >/dev/null
 
 mkdir -p .build
-xcodegen generate --quiet
+xcodegen generate --quiet --spec "${SAIL_PROJECT_SPEC:-fork.yml}"
 status=0
 xcodebuild build -project SailBrowser.xcodeproj -scheme SailBrowser \
   -destination "platform=iOS Simulator,name=$SIM" \

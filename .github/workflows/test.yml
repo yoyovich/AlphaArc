@@ -4,7 +4,8 @@ name: Test
 
 on:
   push:
-    branches: [main]
+    branches: [main, "fork/**"]
+  workflow_dispatch:
   pull_request:
 
 concurrency:
@@ -27,7 +28,7 @@ jobs:
       - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: iOS/.build/DerivedData
-          key: deriveddata-test-xcode-26.5-${{ hashFiles('iOS/project.yml') }}
+          key: deriveddata-test-xcode-26.5-${{ hashFiles('iOS/project.yml', 'iOS/fork.yml') }}
 
       - name: Install XcodeGen
         run: |

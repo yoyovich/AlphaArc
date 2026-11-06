@@ -4,6 +4,7 @@ options:
     iOS: "26.0"
 settings:
   base:
+    SAIL_ICLOUD_CONTAINER: iCloud.com.harunkkhan.browser
     SWIFT_VERSION: "6.0"
     SWIFT_DEFAULT_ACTOR_ISOLATION: MainActor
     SWIFT_APPROACHABLE_CONCURRENCY: YES

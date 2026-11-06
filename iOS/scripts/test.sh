@@ -12,7 +12,7 @@ for arg in "$@"; do
   only+=("-only-testing:$arg")
 done
 
-xcodegen generate --quiet
+xcodegen generate --quiet --spec "${SAIL_PROJECT_SPEC:-fork.yml}"
 xcodebuild test -project SailBrowser.xcodeproj -scheme SailBrowser \
   -destination "platform=iOS Simulator,name=$SIM" \
   -derivedDataPath .build/DerivedData \

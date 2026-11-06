@@ -14,7 +14,7 @@ expect() {
   fi
 }
 
-expect CFBundleIdentifier com.haladir.arcmobile
+expect CFBundleIdentifier "${SAIL_EXPECTED_BUNDLE_IDENTIFIER:-com.yoyovich.sail}"
 expect CFBundleDisplayName Sail
 expect CFBundleName Sailfish
 expect ITSAppUsesNonExemptEncryption false

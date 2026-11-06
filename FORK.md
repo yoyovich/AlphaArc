@@ -1,54 +1,88 @@
-# Sail: рабочая база форка yoyovich
+# Sail — рабочая база форка yoyovich
 
 Исходный проект: https://github.com/SailfishBrowser/iOS
 Базовый коммит: `608e04a919f1685afe5420b29e9906ae7658abb2`.
-Лицензия: Apache-2.0; LICENSE и THIRD_PARTY_NOTICES.md сохранены.
+Лицензия Apache-2.0; LICENSE и THIRD_PARTY_NOTICES.md сохранены.
+Локальная ветка: `fork/yoyovich`.
 
-## Текущее состояние
+## Что готово
 
-Подготовлена локальная ветка `fork/yoyovich`. В Test workflow снято ограничение
-на имя репозитория, чтобы существующие тесты запускались и в форке.
-Функциональные изменения по прошлым обсуждениям пока не внесены: история чатов
-недоступна в этой сессии, требования нужно восстановить с владельцем.
-Создать удалённый форк не удалось: GitHub API вернул
-`403 Resource not accessible by integration` на POST /repos/SailfishBrowser/iOS/forks.
+- Отдельный XcodeGen overlay `iOS/fork.yml`: bundle ID `com.yoyovich.sail`,
+  тестовый ID `com.yoyovich.sail.tests`, контейнер `iCloud.com.yoyovich.sail`.
+- Исходный `project.yml` сохраняет идентификаторы upstream. Entitlements используют
+  `SAIL_ICLOUD_CONTAINER`; приложение выбирает контейнер из своих entitlements.
+- Скрипты build/test/archive по умолчанию генерируют проект из `fork.yml`.
+- Test workflow работает и на ветках `fork/**`; добавлен Linux workflow для
+  ресурсов, Python-тестов и ShellCheck.
+- Исправлен останов обновления PageShield из-за повреждённого правила; добавлены
+  регрессионные тесты. Проверки описаны в [VERIFICATION.md](VERIFICATION.md).
+- Генерируемые файлы Xcode и загрузки конвертера исключены из Git.
 
-## Создание удалённого форка
+Функции из прежних обсуждений не добавлены: прошлые чаты недоступны,
+описание этих идей ещё нужно восстановить с владельцем.
 
-Войти в GitHub под yoyovich и открыть:
-https://github.com/SailfishBrowser/iOS/fork
+## Удалённый репозиторий
 
-Выбрать имя sail. Затем из этого каталога:
+Создание форка через GitHub API завершилось `403 Resource not accessible by integration`.
+Удалённый форк не создан и ветка не опубликована.
+
+Открыть https://github.com/SailfishBrowser/iOS/fork под yoyovich и выбрать имя `sail`.
+Затем из каталога локальной копии:
 
 ```sh
 git remote add origin https://github.com/yoyovich/sail.git
 git push -u origin fork/yoyovich
 ```
 
-## Сборка
+Исходный репозиторий подключён как `upstream`. Workflow появятся после push;
+локальные проверки не означают, что GitHub Actions уже запускались.
 
-Требуются macOS, Xcode 26.5+, XcodeGen и iOS 26+.
+## Сборка на Mac
+
+Нужны Xcode 26.5+, XcodeGen, iOS 26+ и симулятор iPhone 17 Pro.
 
 ```sh
+brew install xcodegen shellcheck actionlint python node
 cd iOS
-xcodegen generate
+xcodegen generate --spec fork.yml
 open SailBrowser.xcodeproj
-# Проверки на Mac:
-scripts/build.sh
-scripts/test.sh
 ```
 
-В Linux текущей сессии Xcode и iOS Simulator отсутствуют, сборка и тесты
-приложения не запускались. Наличие workflow не означает успешную сборку.
+В Xcode выбрать свою Apple Developer Team. Перед запуском на устройстве
+зарегистрировать собственные App ID и iCloud container, включить CloudKit и push
+capabilities и создать provisioning profile. Идентификаторы в overlay —
+настройки исходников, а не уже созданные ресурсы Apple.
 
-Для установки на свой iPhone выбрать свою Apple Developer Team и уникальный
-Bundle Identifier в project.yml. Перед подписанием настроить собственный
-CloudKit container: исходный проект содержит iCloud.com.harunkkhan.browser
-в entitlements и коде. Не использовать идентификаторы и ключи авторов.
-Для TestFlight потребуются собственные App Store Connect и signing credentials.
+Контейнер форка отдельный: вкладки из официального Sailfish для Mac в нём
+не появятся. Для своей синхронизации нужен Mac-клиент с тем же контейнером и схемой CloudKit.
 
-## Требования к следующей итерации
+Полная проверка на настроенном Mac, из корня репозитория:
 
-Ожидается описание ключевых идей владельца: сценарии, интерфейс, функции
-и приоритет первой версии. Никакие предположения об этих идеях не выдаются
-за ранее согласованные решения.
+```sh
+iOS/scripts/verify.sh --ios
+```
+
+Команда без `--ios` проверяет ресурсы, Python-тесты, ShellCheck и actionlint;
+сборка и тесты Swift будут явно отмечены как пропущенные. Нужны Python 3 и Node.js.
+Зависимостей Python для этих проверок нет.
+
+Для воспроизведения сборки с исходными настройками:
+
+```sh
+SAIL_PROJECT_SPEC=project.yml iOS/scripts/build.sh
+SAIL_PROJECT_SPEC=project.yml iOS/scripts/test.sh
+```
+
+Для проверки архива с иным ID задать `SAIL_EXPECTED_BUNDLE_IDENTIFIER`.
+При архивировании upstream это `com.haladir.arcmobile`.
+
+## TestFlight
+
+Нужны собственные Apple Developer и App Store Connect, а также DEVELOPMENT_TEAM,
+ASC_KEY_ID, ASC_ISSUER_ID, ASC_KEY_PATH. Эти credentials не настроены в сессии.
+Существующий Release workflow оставлен с ограничением на upstream: его нельзя
+просто включить в форке, так как он содержит ссылку на TestFlight авторов
+и операции с их конфигурацией релизов. Для собственной публикации его нужно
+адаптировать после настройки своего приложения в App Store Connect.
+
+Подписанного IPA и установки на iPhone в этой сессии нет.
