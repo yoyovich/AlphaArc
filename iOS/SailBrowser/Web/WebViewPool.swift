@@ -24,8 +24,10 @@ enum SafariUserAgent {
 final class WebViewPool {
     let configuration: WKWebViewConfiguration
     let trackers = TrackerCounter()
+    private let featureSync = WebsiteFeatureSync()
     var onControllerCreated: ((WebTabController) -> Void)?
     // A host's settings for a normal (false) or private (true) tab.
+    var browserSettings: () -> BrowserSettings = { BrowserSettings() }
     var siteSettings: (String, Bool) -> SiteSettings = { _, _ in SiteSettings() }
     // Whether a page's language can be translated to the target, read by the controllers built from here on.
     var isTranslationSupported: (Locale.Language, Locale.Language) async -> Bool = PageTranslator.isAvailable
@@ -63,6 +65,12 @@ final class WebViewPool {
         configuration.applicationNameForUserAgent = SafariUserAgent.mobileApplicationName
         configuration.preferences.isElementFullscreenEnabled = true
         blocker.onMissedPage = { [weak self] in self?.reloadMissed($0) }
+        featureSync.options = { [weak self] controller, host in
+            guard let self else { return .disabled }
+            // A site's exception covers its embedded frames too, just as the initial all-frame scripts do.
+            let siteHost = controller.webView.url?.host() ?? host
+            return WebsiteFeatureOptions(settings: browserSettings(), site: siteSettings(siteHost, isPrivate(controller.tabID)))
+        }
     }
 
     func controller(for tab: Tab) -> WebTabController {
@@ -164,6 +172,22 @@ final class WebViewPool {
         prewarm()
     }
 
+    // Update scripts now, including off-screen tabs, so their next navigation uses the new preferences.
+    func refreshWebsiteFeatures() {
+        for controller in controllers.values {
+            let host = controller.url?.host() ?? ""
+            let site = siteSettings(host, isPrivate(controller.tabID))
+            blocker.setBlocking(
+                site.blocksTrackers, host: host, options: WebsiteFeatureOptions(settings: browserSettings(), site: site),
+                on: controller.webView.configuration.userContentController)
+            if controller.webView.window != nil {
+                controller.reload()
+            } else {
+                controller.needsReload = true
+            }
+        }
+    }
+
     func controllers(onHost host: String) -> [WebTabController] {
         controllers.values.filter { $0.url?.host() == host }
     }
@@ -182,10 +206,13 @@ final class WebViewPool {
         controller.applySite = { [weak self, unowned controller] host in
             guard let self else { return SiteSettings() }
             let site = siteSettings(host, isPrivate(controller.tabID))
-            blocker.setBlocking(site.blocksTrackers, host: host, on: controller.webView.configuration.userContentController)
+            blocker.setBlocking(
+                site.blocksTrackers, host: host, options: WebsiteFeatureOptions(settings: browserSettings(), site: site),
+                on: controller.webView.configuration.userContentController)
             return site
         }
         trackers.route(controller)
+        featureSync.route(controller)
         fitToPage(controller)
         controllers[controller.tabID] = controller
         evict(lru.touch(controller.tabID))
@@ -254,6 +281,7 @@ final class WebViewPool {
         configuration.userContentController = WKUserContentController()
         blocker.attach(configuration.userContentController)
         trackers.install(on: configuration.userContentController)
+        featureSync.install(on: configuration.userContentController)
     }
 
     private func takePrewarmed() -> WKWebView {

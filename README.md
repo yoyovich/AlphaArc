@@ -1,6 +1,8 @@
-> **Personal fork preparation:** build with `iOS/fork.yml`. See [FORK.md](FORK.md) for setup and
-> [VERIFICATION.md](VERIFICATION.md) for completed checks and remaining limitations.
-> The TestFlight and release links below belong to upstream; this fork has no published iPhone build.
+> **Personal Sail fork (source only):** necessary-only cookie choices, site cookie management,
+> forced dark websites, and Russian localization. See [FEATURES.md](FEATURES.md),
+> [FORK.md](FORK.md), and [VERIFICATION.md](VERIFICATION.md).
+> Build with `iOS/fork.yml`. The TestFlight/release links below belong to upstream;
+> this fork has no published iPhone build.
 
 <p align="center">
   <picture>

@@ -20,8 +20,11 @@ enum PermissionPrompt {
     }
 
     static func title(host: String, kinds: [MediaKind]) -> String {
-        let uses = kinds.map { $0 == .camera ? "camera" : "microphone" }.joined(separator: " and ")
-        return "Allow “\(host)” to use your \(uses)?"
+        if kinds.contains(.camera), kinds.contains(.microphone) {
+            return L10n.format("Allow “%@” to use your camera and microphone?", host)
+        }
+        return L10n.format(kinds.contains(.camera)
+            ? "Allow “%@” to use your camera?" : "Allow “%@” to use your microphone?", host)
     }
 }
 
@@ -81,7 +84,7 @@ final class PermissionPromptController: UIViewController, UIGestureRecognizerDel
         background.translatesAutoresizingMaskIntoConstraints = false
         container.addSubview(background)
         let content = UIHostingController(
-            rootView: PermissionPromptView(host: host, kinds: kinds) { [unowned self] in answer($0) }.environment(env))
+            rootView: PermissionPromptView(host: host, kinds: kinds) { [unowned self] in answer($0) }.environment(env).environment(\.locale, L10n.locale))
         content.view.backgroundColor = .clear
         addChild(content)
         content.view.frame = container.bounds
@@ -255,7 +258,7 @@ private struct PermissionPromptView: View {
         Button {
             answer(allows)
         } label: {
-            Text(title)
+            Text(LocalizedStringKey(title))
                 .font(Theme.Typography.permissionButton)
                 .frame(maxWidth: .infinity)
                 .frame(height: Theme.Metrics.permissionButtonHeight)

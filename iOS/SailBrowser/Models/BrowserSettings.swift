@@ -30,6 +30,8 @@ nonisolated struct BrowserSettings: Codable, Equatable, Sendable {
     var blocksAds = true
     var blocksTrackers = true
     var blocksCookieBanners = true
+    var automaticallyHandlesCookies = true
+    var forcesDarkWebsites = true
     var zoomByHost: [String: Double] = [:]
     var displayOptionsExpanded = true
     var opensAppLinksInApp = true
@@ -60,6 +62,8 @@ nonisolated struct BrowserSettings: Codable, Equatable, Sendable {
         blocksAds = try container.decodeIfPresent(Bool.self, forKey: .blocksAds) ?? blocks
         blocksTrackers = try container.decodeIfPresent(Bool.self, forKey: .blocksTrackers) ?? blocks
         blocksCookieBanners = try container.decodeIfPresent(Bool.self, forKey: .blocksCookieBanners) ?? blocks
+        automaticallyHandlesCookies = try container.decodeIfPresent(Bool.self, forKey: .automaticallyHandlesCookies) ?? true
+        forcesDarkWebsites = try container.decodeIfPresent(Bool.self, forKey: .forcesDarkWebsites) ?? true
         zoomByHost = try container.decode([String: Double].self, forKey: .zoomByHost)
         displayOptionsExpanded = try container.decodeIfPresent(Bool.self, forKey: .displayOptionsExpanded) ?? true
         opensAppLinksInApp = try container.decodeIfPresent(Bool.self, forKey: .opensAppLinksInApp) ?? true

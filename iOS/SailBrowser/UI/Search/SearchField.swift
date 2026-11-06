@@ -21,7 +21,7 @@ final class SearchField: UITextField {
         textColor = .white
         tintColor = UIColor(Theme.Palette.searchCaret)
         attributedPlaceholder = NSAttributedString(
-            string: "Search...",
+            string: L10n.text("Search..."),
             attributes: [.foregroundColor: UIColor.white.withAlphaComponent(Theme.Opacity.searchFieldPlaceholder)])
         let glyph = UIImage(
             systemName: "xmark.circle.fill",
@@ -34,7 +34,7 @@ final class SearchField: UITextField {
         rightView = clearButton
         rightViewMode = .always
         addSubview(privateToggle)
-        privateLabel.text = "Incognito"
+        privateLabel.text = L10n.text("Incognito")
         privateLabel.font = Theme.Typography.privateFieldLabelUIFont
         privateLabel.textColor = Theme.Palette.privateFieldLabel
         privateLabel.isUserInteractionEnabled = false
@@ -96,7 +96,7 @@ final class SearchField: UITextField {
         privateToggle.setImage(
             glyph.withTintColor(.white.withAlphaComponent(on ? 1 : Theme.Opacity.searchClear), renderingMode: .alwaysOriginal),
             for: .normal)
-        privateToggle.accessibilityLabel = on ? "Turn Off Incognito" : "Turn On Incognito"
+        privateToggle.accessibilityLabel = L10n.text(on ? "Turn Off Incognito" : "Turn On Incognito")
     }
 
     // Each button takes its glyph and the gap on each side, so the touches end where the text does.

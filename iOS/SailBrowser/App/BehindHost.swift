@@ -66,7 +66,7 @@ final class BehindController: UIViewController {
     private let router: BarSwipeRouter
 
     init(env: AppEnvironment) {
-        let host = UIHostingController(rootView: BehindContent(insets: insets).environment(env))
+        let host = UIHostingController(rootView: BehindContent(insets: insets).environment(env).environment(\.locale, L10n.locale))
         host.safeAreaRegions = []
         self.host = host
         self.env = env

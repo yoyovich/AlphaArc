@@ -24,13 +24,13 @@ struct ImportTabsView: View {
                 }
             } footer: {
                 if alreadyOpen > 0 {
-                    Text("^[\(tabs.count) link](inflect: true) to open, \(alreadyOpen) already open")
+                    Text("Links to open: \(tabs.count). Already open: \(alreadyOpen).")
                 } else {
-                    Text("^[\(tabs.count) link](inflect: true) to open")
+                    Text("Links to open: \(tabs.count)")
                 }
             }
             Section {
-                Button("Open ^[\(tabs.count) Tab](inflect: true)") {
+                Button("Open Tabs (\(tabs.count))") {
                     env.importTabs(tabs)
                     env.ui.close()
                 }

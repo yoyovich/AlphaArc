@@ -11,6 +11,8 @@ final class ContentBlocker {
         var applied: Set<BlockingCategory> = []
         var scriptedHost = ""
         var scripts: [WKUserScript] = []
+        var options = WebsiteFeatureOptions.disabled
+        var appliedOptions = WebsiteFeatureOptions.disabled
         // A page decided while the lists were not on yet.
         var missedPage = false
     }
@@ -74,10 +76,13 @@ final class ContentBlocker {
     }
 
     // A site's setting and the host its scripts are built for, applied when a main frame navigation is decided.
-    func setBlocking(_ on: Bool, host: String, on controller: WKUserContentController) {
+    func setBlocking(
+        _ on: Bool, host: String, options: WebsiteFeatureOptions = .disabled, on controller: WKUserContentController
+    ) {
         let attachment = attachments.object(forKey: controller)!
         attachment.wantsBlocking = on
         attachment.host = host
+        attachment.options = options
         attachment.missedPage = on && !isReady && !host.isEmpty
         apply(to: controller)
     }
@@ -181,8 +186,12 @@ final class ContentBlocker {
     // Scriptlets share the page world with other features' scripts, so those are put back after the swap.
     private func apply(to controller: WKUserContentController) {
         let attachment = attachments.object(forKey: controller)!
-        let target = isReady && attachment.wantsBlocking ? categories : []
-        guard target != attachment.applied || (!target.isEmpty && attachment.host != attachment.scriptedHost)
+        var target = isReady && attachment.wantsBlocking ? categories : []
+        // Hiding a CMP before choosing would leave its consent unchanged. In necessary-only mode the
+        // explicit rejection script owns the banner; unsupported banners remain available for manual choice.
+        target = attachment.options.blockingCategories(from: target)
+        guard target != attachment.applied || attachment.options != attachment.appliedOptions
+            || attachment.host != attachment.scriptedHost
         else { return }
         if target != attachment.applied {
             controller.removeAllContentRuleLists()
@@ -191,10 +200,12 @@ final class ContentBlocker {
             }
         }
         let others = controller.userScripts.filter { script in !attachment.scripts.contains { $0 === script } }
-        attachment.scripts = shield!.scripts(for: attachment.host, categories: target)
+        attachment.scripts = (shield?.scripts(for: attachment.host, categories: target) ?? [])
+            + WebsiteFeatures.scripts(for: attachment.options)
         controller.removeAllUserScripts()
         (others + attachment.scripts).forEach(controller.addUserScript)
         attachment.applied = target
         attachment.scriptedHost = attachment.host
+        attachment.appliedOptions = attachment.options
     }
 }

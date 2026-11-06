@@ -105,6 +105,7 @@ import WebKit
 
         haptics.keepsWarm = { [unowned energy] in !energy.isReduced }
         favicons.allowsNetwork = { [unowned energy] in !energy.isReduced }
+        pool.browserSettings = { [unowned browser] in browser.settings }
         pool.siteSettings = { [unowned sites] host, isPrivate in sites.settings(forHost: host, isPrivate: isPrivate) }
         ui.activeTabIsPrivate = { [unowned browser] in browser.activeTab?.isPrivate }
         pool.onControllerCreated = { [weak self] controller in
@@ -545,15 +546,18 @@ import WebKit
     }
 
     private func observeAdBlocking() {
-        observe({ _ = browser.settings.blockedCategories }) { [weak self] in self?.adBlockingChanged() }
+        observe({
+            _ = browser.settings.blockedCategories
+            _ = browser.settings.automaticallyHandlesCookies
+            _ = browser.settings.forcesDarkWebsites
+        }) { [weak self] in self?.adBlockingChanged() }
     }
 
     private func adBlockingChanged() {
         observeAdBlocking()
         let categories = browser.settings.blockedCategories
-        guard categories != blocker.categories else { return }
         blocker.setCategories(categories)
-        activeController?.reload()
+        pool.refreshWebsiteFeatures()
     }
 
     // Energy returning to normal builds the spare web view at once, not after the next new tab's reveal.

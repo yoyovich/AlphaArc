@@ -1,0 +1,5 @@
+"NSCameraUsageDescription" = "Сайты могут запрашивать доступ к камере.";
+"NSMicrophoneUsageDescription" = "Сайты могут запрашивать доступ к микрофону.";
+"NSLocationWhenInUseUsageDescription" = "Сайты могут запрашивать ваше местоположение.";
+"NSPhotoLibraryAddUsageDescription" = "Сохранённые с сайтов изображения добавляются в вашу медиатеку.";
+"NSLocalNetworkUsageDescription" = "Браузер может открывать сайты в вашей локальной сети.";

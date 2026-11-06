@@ -39,7 +39,7 @@ final class SearchSheetController: UIViewController, UITextFieldDelegate, UIGest
     let model: SearchModel
     let env: AppEnvironment
     private(set) lazy var sheet = hosting(
-        SearchSheet(model: model, swipe: recentSwipe, privacy: privacy) { [unowned self] in select($0) }.environment(env))
+        SearchSheet(model: model, swipe: recentSwipe, privacy: privacy) { [unowned self] in select($0) }.environment(env).environment(\.locale, L10n.locale))
     // Whether the sheet shows incognito; the rows and the notice follow it.
     let privacy = SearchPrivacy()
     // Over the material, under everything else: the whole sheet darkens in incognito.
@@ -53,7 +53,7 @@ final class SearchSheetController: UIViewController, UITextFieldDelegate, UIGest
     private let rowCatch = UILongPressGestureRecognizer()
     private var rowHeld = false
     private let look = SearchBarLook()
-    private lazy var browsingCopies = hosting(SearchBarCopies(atDeck: false, look: look).environment(env))
+    private lazy var browsingCopies = hosting(SearchBarCopies(atDeck: false, look: look).environment(env).environment(\.locale, L10n.locale))
     private lazy var deckCopies = hosting(SearchBarCopies(atDeck: true, look: look))
     private(set) lazy var plus = hosting(SearchPlusGlyph(look: look))
     let material = SearchSheetMaterial(Theme.Frost.sheet)

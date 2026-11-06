@@ -136,7 +136,7 @@ struct BarContent: View {
     let controller: WebTabController
 
     var body: some View {
-        BottomBar(controller: controller).environment(env)
+        BottomBar(controller: controller).environment(env).environment(\.locale, L10n.locale)
     }
 }
 

@@ -31,7 +31,7 @@ enum TranslateRow {
     }
 
     static func name(of language: Locale.Language) -> String {
-        Locale.current.localizedString(forIdentifier: language.minimalIdentifier)!
+        L10n.locale.localizedString(forIdentifier: language.minimalIdentifier) ?? language.minimalIdentifier
     }
 
     // The row's and the bar button's tap. Nothing in the turn between a reset and the next render, when the offer is

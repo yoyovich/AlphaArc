@@ -1,0 +1,44 @@
+PASS: 24 JSON resources and fixtures
+PASS: 4 plist/entitlement/privacy files
+PASS: 4 WebKit lists, 142623 rules; each below 150000
+PASS: tracker regeneration, 95281 domains
+PASS: PageShield schema and all 8 supported scriptlets
+PASS: asset references and 1024×1024 app icons
+PASS: syntax of 5 JavaScript and 8 shell scripts
+test_all_bundled_rules_survive_conversion (test_filter_tools.PageShieldTests.test_all_bundled_rules_survive_conversion) ... ok
+test_css_is_assigned_to_each_domain (test_filter_tools.PageShieldTests.test_css_is_assigned_to_each_domain) ... ok
+test_generic_rules_and_aliases (test_filter_tools.PageShieldTests.test_generic_rules_and_aliases) ... ok
+test_malformed_rule_does_not_discard_following_rules (test_filter_tools.PageShieldTests.test_malformed_rule_does_not_discard_following_rules) ... ok
+test_procedural_not_is_not_inverted (test_filter_tools.PageShieldTests.test_procedural_not_is_not_inverted) ... ok
+test_scriptlet_alias_and_escaped_quote (test_filter_tools.PageShieldTests.test_scriptlet_alias_and_escaped_quote) ... ok
+test_style_rules_are_preserved_and_remove_is_dropped (test_filter_tools.PageShieldTests.test_style_rules_are_preserved_and_remove_is_dropped) ... ok
+test_unknown_scriptlet_is_dropped (test_filter_tools.PageShieldTests.test_unknown_scriptlet_is_dropped) ... ok
+test_unsupported_or_negated_rules_are_not_broadened (test_filter_tools.PageShieldTests.test_unsupported_or_negated_rules_are_not_broadened) ... ok
+test_exceptions_remove_domains (test_filter_tools.TrackerDomainsTests.test_exceptions_remove_domains) ... ok
+test_subdomain_rules_keep_the_leading_dot (test_filter_tools.TrackerDomainsTests.test_subdomain_rules_keep_the_leading_dot) ... ok
+test_unconditional_rules_only_and_deduplication (test_filter_tools.TrackerDomainsTests.test_unconditional_rules_only_and_deduplication) ... ok
+test_app_owned_uikit_localization_keys_exist (test_localization.LocalizationTests.test_app_owned_uikit_localization_keys_exist) ... ok
+test_english_and_russian_have_identical_keys_and_format_arguments (test_localization.LocalizationTests.test_english_and_russian_have_identical_keys_and_format_arguments) ... ok
+test_literal_swiftui_labels_are_translated (test_localization.LocalizationTests.test_literal_swiftui_labels_are_translated) ... ok
+test_permission_descriptions_are_localized (test_localization.LocalizationTests.test_permission_descriptions_are_localized) ... ok
+test_custom_identity_override_is_accepted (test_release_checks.ReleaseMetadataTests.test_custom_identity_override_is_accepted) ... ok
+test_invalid_versions_are_rejected (test_release_checks.ReleaseMetadataTests.test_invalid_versions_are_rejected) ... ok
+test_missing_privacy_manifest_is_rejected (test_release_checks.ReleaseMetadataTests.test_missing_privacy_manifest_is_rejected) ... ok
+test_personal_fork_metadata_is_accepted (test_release_checks.ReleaseMetadataTests.test_personal_fork_metadata_is_accepted) ... ok
+test_wrong_app_identity_is_rejected (test_release_checks.ReleaseMetadataTests.test_wrong_app_identity_is_rejected) ... ok
+
+----------------------------------------------------------------------
+Ran 21 tests in 4.290s
+
+OK
+PASS: chromium / desktop-light
+PASS: chromium / desktop-dark
+PASS: chromium / phone-light
+PASS: chromium / phone-dark
+PASS: chromium / phone-landscape-ru
+PASS: webkit / desktop-light
+PASS: webkit / desktop-dark
+PASS: webkit / phone-light
+PASS: webkit / phone-dark
+PASS: webkit / phone-landscape-ru
+SKIP: iOS build, Swift tests and simulator checks; run verify.sh --ios on a configured Mac

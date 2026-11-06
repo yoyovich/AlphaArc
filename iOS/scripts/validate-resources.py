@@ -25,14 +25,14 @@ def require(condition, message):
 def run():
     json_paths = list((ROOT / 'iOS').rglob('*.json'))
     # Generated build/tool directories may contain unrelated JSON.
-    json_paths = [p for p in json_paths if not any(part in {'.build', '.tools'} for part in p.parts)]
+    json_paths = [p for p in json_paths if not any(part in {'.build', '.tools', 'node_modules', 'test-results', 'playwright-report'} for part in p.parts)]
     for path in json_paths:
         json.loads(path.read_text(encoding='utf-8'))
     print(f'PASS: {len(json_paths)} JSON resources and fixtures')
 
     plists = [p for p in (ROOT / 'iOS').rglob('*')
               if p.suffix in {'.plist', '.entitlements', '.xcprivacy'}
-              and not any(part in {'.build', '.tools'} for part in p.parts)]
+              and not any(part in {'.build', '.tools', 'node_modules', 'test-results', 'playwright-report'} for part in p.parts)]
     for path in plists:
         plistlib.loads(path.read_bytes())
     print(f'PASS: {len(plists)} plist/entitlement/privacy files')

@@ -20,6 +20,7 @@ struct SummaryCard: View {
         // At the top, so the title and Done hold still while the summary grows below them.
         .frame(maxHeight: .infinity, alignment: .top)
         .environment(\.colorScheme, look.isLight ? .light : .dark)
+        .environment(\.locale, L10n.locale)
     }
 
     private func content(ink: Color) -> some View {
@@ -42,8 +43,8 @@ struct SummaryCard: View {
 
     private var text: String {
         switch summarizer.state {
-        case .idle, .summarizing(""): "Summarizing"
-        case .done(""), .noSummary: "No summary"
+        case .idle, .summarizing(""): L10n.text("Summarizing")
+        case .done(""), .noSummary: L10n.text("No summary")
         case .summarizing(let text), .done(let text): text
         }
     }

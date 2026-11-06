@@ -17,6 +17,8 @@ nonisolated enum MediaKind: String, Codable, Sendable {
 nonisolated struct SiteSettings: Codable, Equatable, Sendable {
     var blocksTrackers = true
     var allowsJavaScript = true
+    var allowsCookieAutomation = true
+    var allowsForcedDark = true
     var camera = SitePermission.ask
     var microphone = SitePermission.ask
 
@@ -38,6 +40,8 @@ nonisolated extension SiteSettings {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         blocksTrackers = try container.decode(Bool.self, forKey: .blocksTrackers)
         allowsJavaScript = try container.decode(Bool.self, forKey: .allowsJavaScript)
+        allowsCookieAutomation = try container.decodeIfPresent(Bool.self, forKey: .allowsCookieAutomation) ?? true
+        allowsForcedDark = try container.decodeIfPresent(Bool.self, forKey: .allowsForcedDark) ?? true
         camera = try container.decodeIfPresent(SitePermission.self, forKey: .camera) ?? .ask
         microphone = try container.decodeIfPresent(SitePermission.self, forKey: .microphone) ?? .ask
     }

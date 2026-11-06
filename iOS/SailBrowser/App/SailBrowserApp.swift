@@ -29,7 +29,7 @@ struct SailBrowserApp: App {
         WindowGroup {
             if let env, let hapticSink {
                 RootView(hapticSink: hapticSink)
-                    .environment(env)
+                    .environment(env).environment(\.locale, L10n.locale)
                     .onOpenURL { url in
                         SharePresenter.dismiss()
                         env.openLink(url)

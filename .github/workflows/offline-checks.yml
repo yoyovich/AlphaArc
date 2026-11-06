@@ -22,3 +22,28 @@ jobs:
         run: python3 -m unittest discover -s iOS/scripts/tests -v
       - name: Lint shell scripts
         run: shellcheck iOS/scripts/*.sh
+
+  browser-features:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chromium, webkit]
+        mobile: ["0", "1"]
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Install locked test dependencies
+        run: npm ci --ignore-scripts --prefix iOS/scripts/browser-tests
+      - name: Check test dependency advisories
+        if: matrix.browser == 'chromium' && matrix.mobile == '0'
+        run: npm audit --prefix iOS/scripts/browser-tests --audit-level=moderate
+      - name: Install browser and runtime dependencies
+        working-directory: iOS/scripts/browser-tests
+        run: npx playwright install --with-deps "${{ matrix.browser }}"
+      - name: Test website features and blocker JavaScript
+        env:
+          SAIL_TEST_BROWSER: ${{ matrix.browser }}
+          SAIL_TEST_MOBILE: ${{ matrix.mobile }}
+          SAIL_TEST_COLOR_SCHEME: ${{ matrix.mobile == '1' && 'dark' || 'light' }}
+        run: npm test --prefix iOS/scripts/browser-tests

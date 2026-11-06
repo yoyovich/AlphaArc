@@ -24,7 +24,7 @@ struct SearchPill: View {
             #if DEBUG
             .debugAction(.plusTap) { open() }
             #endif
-            .accessibilityLabel(atDeck ? "New Tab" : "Search")
+            .accessibilityLabel(Text(LocalizedStringKey(atDeck ? "New Tab" : "Search")))
             .accessibilityAddTraits(.isButton)
             .accessibilityAction { open() }
             // VoiceOver cannot pinch, and a web view's own actions are out of its reach.

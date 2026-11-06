@@ -1,5 +1,6 @@
 name: SailBrowser
 options:
+  developmentLanguage: en
   deploymentTarget:
     iOS: "26.0"
 settings:
@@ -38,6 +39,7 @@ targets:
         ITSAppUsesNonExemptEncryption: false
         LSApplicationCategoryType: public.app-category.utilities
         LSRequiresIPhoneOS: true
+        CFBundleLocalizations: [en, ru]
         UISupportedInterfaceOrientations: [UIInterfaceOrientationPortrait]
         UISupportedInterfaceOrientations~ipad:
           - UIInterfaceOrientationPortrait

@@ -29,16 +29,16 @@ extension WebTabController {
 
     func linkMenu(for url: URL) -> UIMenu {
         UIMenu(children: [
-            UIAction(title: "Open in New Tab", image: UIImage(systemName: "plus.square.on.square")) { [weak self] _ in
+            UIAction(title: L10n.text("Open in New Tab"), image: UIImage(systemName: "plus.square.on.square")) { [weak self] _ in
                 self?.onOpenLink?(url, false)
             },
-            UIAction(title: "Open in Background", image: UIImage(systemName: "square.on.square")) { [weak self] _ in
+            UIAction(title: L10n.text("Open in Background"), image: UIImage(systemName: "square.on.square")) { [weak self] _ in
                 self?.onOpenLink?(url, true)
             },
-            UIAction(title: "Copy Link", image: UIImage(systemName: "doc.on.doc")) { _ in
+            UIAction(title: L10n.text("Copy Link"), image: UIImage(systemName: "doc.on.doc")) { _ in
                 UIPasteboard.general.url = TrackingParams.strip(url)
             },
-            UIAction(title: "Share Link", image: UIImage(systemName: "square.and.arrow.up")) { _ in
+            UIAction(title: L10n.text("Share Link"), image: UIImage(systemName: "square.and.arrow.up")) { _ in
                 SharePresenter.share(url)
             },
         ])

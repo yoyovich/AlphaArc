@@ -33,7 +33,7 @@ final class PageDialogs {
 
     // A page that jumps to another app's link on its own asks first, as Safari does, and counts as one of its dialogs.
     func openApp(_ app: String, in webView: WKWebView) async -> Bool {
-        await show(title: "Open in “\(app)”?", message: nil, cancel: false, isPage: true, in: webView) { dialog, answer in
+        await show(title: L10n.format("Open in “%@”?", app), message: nil, cancel: false, isPage: true, in: webView) { dialog, answer in
             dialog.add("Cancel", style: .cancel) { answer(false) }
             dialog.add("Open", style: .default) { answer(true) }
         }
@@ -51,11 +51,11 @@ final class PageDialogs {
     func signIn(host: String, in webView: WKWebView) async -> URLCredential? {
         await show(title: host, message: nil, cancel: nil, isPage: false, in: webView) { dialog, answer in
             dialog.alert.addTextField {
-                $0.placeholder = "User Name"
+                $0.placeholder = L10n.text("User Name")
                 $0.textContentType = .username
             }
             dialog.alert.addTextField {
-                $0.placeholder = "Password"
+                $0.placeholder = L10n.text("Password")
                 $0.textContentType = .password
                 $0.isSecureTextEntry = true
             }
@@ -131,7 +131,7 @@ final class PageDialog {
     }
 
     fileprivate func add(_ title: String, style: UIAlertAction.Style, answer: @escaping () -> Void) {
-        let action = UIAlertAction(title: title, style: style) { [unowned self] in choose($0) }
+        let action = UIAlertAction(title: L10n.text(title), style: style) { [unowned self] in choose($0) }
         answers[action] = answer
         alert.addAction(action)
     }

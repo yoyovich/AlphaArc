@@ -25,7 +25,7 @@ final class PageMenuController: UIViewController, UIGestureRecognizerDelegate, S
         let host = UIHostingController(
             rootView: PageMenuContent(
                 onLook: { [unowned self] in background.apply($0) }, onFold: { [unowned self] in fold($0) }
-            ).environment(env))
+            ).environment(env).environment(\.locale, L10n.locale))
         host.safeAreaRegions = []
         host.sizingOptions = .intrinsicContentSize
         return host

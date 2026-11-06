@@ -45,6 +45,6 @@ struct SwitcherBar: View {
         #if DEBUG
         .debugAction(interaction, open)
         #endif
-        .accessibilityLabel(label)
+        .accessibilityLabel(Text(LocalizedStringKey(label)))
     }
 }

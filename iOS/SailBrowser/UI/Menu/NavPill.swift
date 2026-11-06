@@ -96,7 +96,7 @@ struct NavPill: View {
         .buttonStyle(PressStyle(scale: Theme.Metrics.pressScaleWide, preparing: .menuNav))
         .disabled(!enabled)
         .opacity(enabled ? 1 : Theme.Opacity.navPillDisabled)
-        .accessibilityLabel(label)
+        .accessibilityLabel(Text(LocalizedStringKey(label)))
     }
 
     private func icon(_ systemImage: String) -> some View {

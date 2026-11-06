@@ -9,3 +9,8 @@ iOS/.tools/
 __pycache__/
 *.pyc
 iOS/SailBrowser/Info.plist
+
+# Local browser-test dependencies and results.
+node_modules/
+playwright-report/
+test-results/

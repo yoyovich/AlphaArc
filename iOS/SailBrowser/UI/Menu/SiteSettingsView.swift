@@ -1,4 +1,5 @@
 import SwiftUI
+import WebKit
 
 struct SiteSettingsView: View {
     @Environment(AppEnvironment.self) private var env
@@ -12,9 +13,15 @@ struct SiteSettingsView: View {
             Form {
                 Section {
                     if blocksGlobally {
-                        Toggle("Block Trackers", isOn: changing(\.blocksTrackers))
+                        Toggle("Content Blocking", isOn: changing(\.blocksTrackers))
                     }
                     Toggle("JavaScript", isOn: changing(\.allowsJavaScript))
+                    Toggle("Only Necessary Cookies", isOn: changing(\.allowsCookieAutomation))
+                        .disabled(!env.browser.settings.automaticallyHandlesCookies || !env.siteSettings(forHost: host).allowsJavaScript)
+                    Toggle("Force Dark Websites", isOn: changing(\.allowsForcedDark))
+                        .disabled(!env.browser.settings.forcesDarkWebsites || !env.siteSettings(forHost: host).allowsJavaScript)
+                } footer: {
+                    Text("Website features follow global settings and pause when JavaScript is off.")
                 }
                 Section {
                     permission("Camera", .camera)
@@ -28,6 +35,12 @@ struct SiteSettingsView: View {
                 }
                 .disabled(isPrivate)
                 Section {
+                    NavigationLink {
+                        CookiesView(host: host, store: env.activeController?.webView.configuration.websiteDataStore.httpCookieStore)
+                            .id(host)
+                    } label: {
+                        Label("Cookies", systemImage: "list.bullet.rectangle")
+                    }
                     Button("Clear Website Data", role: .destructive) {
                         confirmingClear = true
                     }
@@ -48,14 +61,14 @@ struct SiteSettingsView: View {
 
     // Takes effect on the site's next request; a capture already running goes on.
     private func permission(_ title: String, _ kind: MediaKind) -> some View {
-        Picker(title, selection: Binding {
+        Picker(LocalizedStringKey(title), selection: Binding {
             env.sites[host][kind]
         } set: {
             env.haptics.fire(.settingsChange)
             env.sites[host][kind] = $0
         }) {
             ForEach(SitePermission.allCases, id: \.self) {
-                Text($0.label)
+                Text(LocalizedStringKey($0.label))
             }
         }
         .pickerStyle(.menu)

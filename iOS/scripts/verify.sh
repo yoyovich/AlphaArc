@@ -4,12 +4,15 @@ set -euo pipefail
 cd "$(dirname "$0")/../.."
 
 run_ios=0
-case "${1:-}" in
-  '') ;;
-  --ios) run_ios=1 ;;
-  *) echo 'usage: iOS/scripts/verify.sh [--ios]' >&2; exit 2 ;;
-esac
-[ "$#" -le 1 ] || { echo 'usage: iOS/scripts/verify.sh [--ios]' >&2; exit 2; }
+run_web=0
+for argument in "$@"; do
+  case "$argument" in
+    --ios) run_ios=1 ;;
+    --web) run_web=1 ;;
+    --all) run_ios=1; run_web=1 ;;
+    *) echo 'usage: iOS/scripts/verify.sh [--ios] [--web] [--all]' >&2; exit 2 ;;
+  esac
+done
 
 python3 iOS/scripts/validate-resources.py
 python3 -m unittest discover -s iOS/scripts/tests -v
@@ -24,6 +27,16 @@ shellcheck iOS/scripts/*.sh
 actionlint
 
 git diff --check
+
+if [ "$run_web" = 1 ]; then
+  if [ ! -d iOS/scripts/browser-tests/node_modules/playwright ]; then
+    echo 'verify.sh: first run npm ci --prefix iOS/scripts/browser-tests and install Playwright Chromium and WebKit' >&2
+    exit 1
+  fi
+  iOS/scripts/test-browser-matrix.sh
+else
+  echo 'SKIP: browser-engine behavior tests; run verify.sh --web after installing test browsers'
+fi
 if [ "$run_ios" = 1 ]; then
   if [ "$(uname -s)" != Darwin ]; then
     echo 'verify.sh: --ios requires macOS, Xcode 26.5+, XcodeGen and an iOS 26+ simulator' >&2

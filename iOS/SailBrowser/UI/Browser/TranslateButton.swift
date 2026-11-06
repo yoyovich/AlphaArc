@@ -49,7 +49,7 @@ struct TranslateButton: View {
             }
         }
         #endif
-        .accessibilityLabel(look.label)
+        .accessibilityLabel(Text(LocalizedStringKey(look.label)))
         .accessibilityAddTraits(.isButton)
         .accessibilityAction { tap() }
     }
@@ -57,7 +57,7 @@ struct TranslateButton: View {
     static func look(_ state: PageTranslator.State, target: Locale.Language) -> Look {
         switch state {
         case .idle, .failed:
-            Look(showsSpinner: false, isTranslated: false, label: "Translate to \(TranslateRow.name(of: target))")
+            Look(showsSpinner: false, isTranslated: false, label: L10n.format("Translate to %@", TranslateRow.name(of: target)))
         case .translating: Look(showsSpinner: true, isTranslated: false, label: "Translating")
         case .translated: Look(showsSpinner: false, isTranslated: true, label: "Show Original")
         }

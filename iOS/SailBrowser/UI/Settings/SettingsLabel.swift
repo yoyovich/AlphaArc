@@ -14,7 +14,7 @@ struct SettingsLabel: View {
 
     var body: some View {
         Label {
-            Text(title)
+            Text(LocalizedStringKey(title))
         } icon: {
             Image(systemName: systemImage)
                 .font(Theme.Typography.settingsIconGlyph)

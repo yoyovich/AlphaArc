@@ -61,7 +61,7 @@ final class LoadErrorView: UIView {
         addSubview(button)
         dismissButton.titleLabel?.font = Theme.Network.errorDetailFont
         dismissButton.setTitleColor(ink.withAlphaComponent(Theme.Network.errorDetailOpacity), for: .normal)
-        dismissButton.setTitle("Go back", for: .normal)
+        dismissButton.setTitle(L10n.text("Go back"), for: .normal)
         dismissButton.accessibilityIdentifier = "loadError.dismiss"
         dismissButton.addAction(UIAction { [unowned self] _ in self.onDismiss?() }, for: .touchUpInside)
         addSubview(dismissButton)
@@ -80,10 +80,10 @@ final class LoadErrorView: UIView {
     // The copy, the symbol, the button and the way back change in place; the backdrop stays the last real picture.
     func update(error: LoadError, canDismiss: Bool) {
         glyphView.image = UIImage(systemName: error.reason.symbol)
-        titleLabel.text = error.reason.title
+        titleLabel.text = L10n.text(error.reason.title)
         detailLabel.text = error.host
         detailLabel.isHidden = error.host == nil
-        button.setTitle(error.reason.button, for: .normal)
+        button.setTitle(L10n.text(error.reason.button), for: .normal)
         dismissButton.isHidden = onDismiss == nil || !canDismiss
         setNeedsLayout()
     }

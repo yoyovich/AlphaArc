@@ -245,8 +245,8 @@ final class PageShield {
           }
 
           // A consent manager hidden by the cookie list can leave html or body unscrollable and a backdrop over the
-          // page. Once one is hidden, its lock and backdrop go too, and a documented reject button is clicked; accept
-          // never is. A banner only named like one counts when it is fixed. The check reads styles after a rendering
+          // page. Once one is hidden, its lock and backdrop go too. Hiding does not submit a consent choice;
+          // the separate necessary-only feature owns explicit refusals. A banner only named like one counts when it is fixed. The check reads styles after a rendering
           // update, when they are already computed, and watches html and body only until a window after load and
           // the first unlock, so the site's own later locks, a menu or a modal, stay.
           if (unlocksCookieWalls && window === window.top) {
@@ -257,9 +257,7 @@ final class PageShield {
             const namePattern = /cookie|consent|gdpr/i;
             const backdrops = '.onetrust-pc-dark-filter, .didomi-popup-backdrop, .sp_veil, .truste_overlay, '
               + '.truste_box_overlay, #CybotCookiebotDialogBodyUnderlay, .qc-cmp2-container';
-            const rejects = '#onetrust-reject-all-handler, #didomi-notice-disagree-button, '
-              + '#CybotCookiebotDialogBodyButtonDecline';
-            let rejected = false, unlocked = false, loaded = document.readyState === 'complete';
+            let unlocked = false, loaded = document.readyState === 'complete';
             let observer = null, stop = null, queued = false;
             const watchFromNow = () => {
               clearTimeout(stop);
@@ -285,14 +283,6 @@ final class PageShield {
               const hiddenBanner = cmps.length ? cmps.some(element => !element.checkVisibility())
                 : named.some(element => !element.checkVisibility() && getComputedStyle(element).position === 'fixed');
               if (!hiddenBanner) return;
-              if (cmps.length && !rejected) {
-                const button = document.querySelector(rejects);
-                did();
-                if (button) {
-                  rejected = true;
-                  button.click();
-                }
-              }
               // WebKit can report a fixed body's overflow as not hidden, so either sign of a lock clears both.
               did(2);
               for (const element of [document.documentElement, document.body]) {

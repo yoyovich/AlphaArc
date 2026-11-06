@@ -45,6 +45,6 @@ struct ZoomStepper: View {
         }
         .disabled(!enabled)
         .opacity(enabled ? 1 : Theme.Opacity.navPillDisabled)
-        .accessibilityLabel(label)
+        .accessibilityLabel(Text(LocalizedStringKey(label)))
     }
 }

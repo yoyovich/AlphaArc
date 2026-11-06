@@ -1,4 +1,5 @@
 import SwiftUI
+import UIKit
 
 struct SettingsView: View {
     @Environment(AppEnvironment.self) private var env
@@ -37,7 +38,7 @@ struct SettingsView: View {
                     }
                     Picker(selection: changing(\.archiveInterval)) {
                         ForEach(ArchiveInterval.allCases, id: \.self) { interval in
-                            Text(interval.label).tag(interval)
+                            Text(LocalizedStringKey(interval.label)).tag(interval)
                         }
                     } label: {
                         SettingsLabel("Archive tabs after", systemImage: "archivebox.fill", color: .purple)
@@ -62,9 +63,19 @@ struct SettingsView: View {
                         Text("Website data, history and archived tabs will be removed. Open tabs stay.")
                     }
                 }
+                Section {
+                    Button {
+                        if let url = URL(string: UIApplication.openSettingsURLString) { UIApplication.shared.open(url) }
+                    } label: {
+                        SettingsLabel("App Language", systemImage: "character.bubble", color: .blue)
+                    }
+                    .tint(.primary)
+                } footer: {
+                    Text("Choose English or Russian in iOS app settings.")
+                }
                 BlockingSection(changing: changing)
                 TransferSection(showsImport: $showsImport)
-                AcknowledgementsSection(footer: "Version \(Self.appVersion)\nBlocklists \(blocklistVersion)")
+                AcknowledgementsSection(footer: L10n.format("Version %@\nBlocklists %@", Self.appVersion, blocklistVersion))
             }
             .contentMargins(.top, Theme.Metrics.settingsTop, for: .scrollContent)
             .navigationDestination(isPresented: $showsDownloads) { DownloadsView() }
@@ -88,7 +99,7 @@ struct SettingsView: View {
 
     private func pill(_ title: String, systemImage: String, action: @escaping () -> Void) -> some View {
         Button(action: action) {
-            Label(title, systemImage: systemImage)
+            Label(LocalizedStringKey(title), systemImage: systemImage)
                 .font(Theme.Typography.settingsButton)
                 .foregroundStyle(.primary)
                 .frame(maxWidth: .infinity, minHeight: Theme.Metrics.settingsButtonHeight)

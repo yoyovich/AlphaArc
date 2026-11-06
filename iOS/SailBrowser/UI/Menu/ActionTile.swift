@@ -35,8 +35,8 @@ struct ActionTile: View {
                     .contentShape(RoundedRectangle(cornerRadius: Theme.Metrics.menuTileCorner, style: .continuous))
             }
             .buttonStyle(PressStyle(scale: Theme.Metrics.pressScale, preparing: preparing))
-            .accessibilityLabel(title)
-            Text(title)
+            .accessibilityLabel(Text(LocalizedStringKey(title)))
+            Text(LocalizedStringKey(title))
                 .font(Theme.Typography.menuTileLabel)
                 .tracking(Theme.Metrics.menuTileLabelTracking)
                 .foregroundStyle(ink.opacity(Theme.Opacity.menuSecondary))

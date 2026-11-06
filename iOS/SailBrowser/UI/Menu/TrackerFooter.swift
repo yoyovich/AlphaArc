@@ -38,7 +38,7 @@ struct TrackerFooter: View {
         switch shown.content {
         case .scrubbed(let count):
             let number = Text(count, format: .number).font(Theme.Typography.menuFooterCount)
-            Text("\(number) \(count == 1 ? "tracker" : "trackers") blocked")
+            Text("Trackers blocked: \(number)")
         case .allowed:
             Text("Trackers allowed")
         }

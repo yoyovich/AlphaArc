@@ -117,6 +117,6 @@ private struct DownloadRow: View {
     private var progressText: String {
         let bytes = record.bytes.formatted(.byteCount(style: .file))
         guard record.total > 0 else { return bytes }
-        return "\(bytes) of \(record.total.formatted(.byteCount(style: .file)))"
+        return L10n.format("%@ of %@", bytes, record.total.formatted(.byteCount(style: .file)))
     }
 }

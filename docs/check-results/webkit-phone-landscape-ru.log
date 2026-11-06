@@ -1,0 +1,70 @@
+
+> sail-website-feature-tests@1.0.0 test
+> node --test --test-concurrency=1 *.test.mjs
+
+Skipping host requirements validation logic because `PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS` env variable is set.
+✔ necessary cookies: explicit CMP onetrust-banner-sdk (501.746853ms)
+✔ necessary cookies: explicit CMP CybotCookiebotDialog (388.62186ms)
+✔ necessary cookies: explicit CMP didomi-host (351.347038ms)
+✔ necessary cookies: exact label Reject all (382.997386ms)
+✔ necessary cookies: exact label Only necessary (414.419589ms)
+✔ necessary cookies: exact label Принять только необходимые (371.142563ms)
+✔ necessary cookies: exact label Только обязательные (362.155471ms)
+✔ necessary cookies: exact label Отклонить все (364.527021ms)
+✔ necessary cookies: exact label Tout refuser (377.606379ms)
+✔ necessary cookies: exact label Alle ablehnen (361.650297ms)
+✔ necessary cookies: exact label Reject all!   (370.632609ms)
+✔ necessary cookies: ambiguous, accept-all and unrelated controls stay untouched (363.734762ms)
+✔ necessary cookies: a non-cookie dialog is never acted on (389.601832ms)
+✔ necessary cookies: an unsupported cookie banner remains visible (409.045586ms)
+✔ necessary cookies: hidden, inert, disabled and misleading labels are skipped (363.550639ms)
+✔ necessary cookies: recognized IDs do not override an accept-all label (385.116286ms)
+✔ necessary cookies: dynamically inserted banner (549.670296ms)
+✔ necessary cookies: initially hidden banner opened later (518.430525ms)
+✔ necessary cookies: open shadow DOM and delayed content (503.248908ms)
+✔ necessary cookies: repeat injection never clicks the same control twice (378.331621ms)
+✔ necessary cookies: no consent cookie, local storage or network is fabricated (367.334686ms)
+✔ dark mode: light surfaces and text become readable (292.858264ms)
+✔ dark mode: inline !important light styles are adapted (258.604025ms)
+✔ dark mode: native dark surfaces retain their background (274.524726ms)
+✔ dark mode: media and SVG are never inverted or recolored (283.478472ms)
+✔ dark mode: dynamic SPA content is adapted (286.659834ms)
+✔ dark mode: CSP that forbids injected styles still permits property-based recoloring (233.256985ms)
+✔ dark mode: idempotent injection installs one stylesheet (268.676328ms)
+✔ features coexist: darkening does not hide the cookie choice before rejection (400.901808ms)
+✔ necessary cookies: translated accept-all on a familiar CMP ID is not clicked (370.033234ms)
+✔ necessary cookies: script has a bounded action count across banner re-creations (1515.693223ms)
+✔ features: non-web documents are left untouched (250.506742ms)
+✔ dark mode: a large document is processed in separate event-loop turns (957.047835ms)
+✔ blocker: set-constant intercepts later object assignments (224.386869ms)
+✔ blocker: abort-on-property-read blocks only the named property (193.782219ms)
+✔ blocker: abort-current-inline-script leaves nonmatching scripts alone (226.419858ms)
+✔ blocker: json-prune removes matching payloads, not ordinary JSON (211.677932ms)
+✔ blocker: remove-attr continues working after DOM insertion (270.846926ms)
+✔ blocker: remove-class unlocks only the specified classes (230.364673ms)
+✔ blocker: prevent-addEventListener preserves unrelated listeners (228.726636ms)
+✔ blocker: prevent-setTimeout preserves unrelated timers (229.012032ms)
+✔ blocker: procedural has-text and upward hide the ad parent, not the article (219.872359ms)
+✔ blocker: nested procedural has follows dynamically added ads (239.664762ms)
+✔ blocker: cosmetic rules are scoped to the requested host (221.102668ms)
+✔ blocker: hiding a cookie wall unlocks scrolling without submitting consent (287.88946ms)
+✔ features: a cookie CMP inside an embedded frame is handled in that frame (361.219135ms)
+✔ necessary cookies: disabling stops observation and cancels pending work (226.234349ms)
+✔ dark mode: disabling restores original inline priorities and removes owned styles (258.503925ms)
+✔ dark mode: disabling preserves subsequent changes made by the website (237.420931ms)
+✔ dark mode: re-enabling on the same document starts cleanly (295.801375ms)
+✔ dark mode: translucent light panels keep readable text (268.787636ms)
+✔ dark mode: editable content is left under the site’s control (281.919558ms)
+✔ cache restore bridge: only a persisted pageshow asks native policy again (218.185236ms)
+✔ necessary cookies: detached shadow roots can be observed again after reattachment (829.895302ms)
+✔ dark mode: modern CSS color oklch(100% 0 0) is adapted (282.628037ms)
+✔ dark mode: modern CSS color color(display-p3 1 1 1) is adapted (262.754099ms)
+✔ dark mode: modern CSS color color(srgb 1 1 1) is adapted (272.778447ms)
+ℹ tests 57
+ℹ suites 0
+ℹ pass 57
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 20769.259799

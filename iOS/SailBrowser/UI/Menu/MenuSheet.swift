@@ -220,7 +220,7 @@ struct MenuGroup: View {
 
     private func content(_ row: MenuRow) -> some View {
         HStack(spacing: 0) {
-            Text(row.title)
+            Text(LocalizedStringKey(row.title))
                 .font(Theme.Typography.menuRow)
             Spacer(minLength: 0)
             switch row.accessory {

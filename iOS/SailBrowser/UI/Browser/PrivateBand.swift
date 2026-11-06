@@ -12,7 +12,7 @@ class PrivateBandView: UIView {
         super.init(frame: frame)
         backgroundColor = Theme.Palette.privateBand
         isUserInteractionEnabled = false
-        label.text = "Incognito"
+        label.text = L10n.text("Incognito")
         label.font = Theme.Typography.privateBandLabelUIFont
         label.textColor = Theme.Palette.privateBandLabel
         addSubview(label)
