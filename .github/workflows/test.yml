@@ -16,7 +16,6 @@ permissions:
 
 jobs:
   test:
-    if: github.repository == 'SailfishBrowser/iOS'
     runs-on: macos-26
     timeout-minutes: 60
     steps:
