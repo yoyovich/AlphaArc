@@ -9,8 +9,11 @@ struct ArchiveView: View {
 
     var body: some View {
         let now = Date.now
-        var calendar = Calendar.current
-        calendar.locale = L10n.locale
+        let calendar: Calendar = {
+            var calendar = Calendar.current
+            calendar.locale = L10n.locale
+            return calendar
+        }()
         let sections = grouping.sections(env.browser.archived, query: query, now: now, calendar: calendar)
         let timeCutoff = calendar.date(byAdding: .day, value: -Self.daysShowingTime, to: calendar.startOfDay(for: now))!
         let firstID = sections.first?.entries.first?.id
