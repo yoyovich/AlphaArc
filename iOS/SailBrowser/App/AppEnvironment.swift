@@ -100,8 +100,9 @@ import WebKit
             blocker: blocker, sessions: sessions, haptics: haptics, prewarms: { [unowned energy] in !energy.isReduced })
         snapshots = SnapshotStore(directories: directories)
         favicons = FaviconStore(directories: directories)
+        let cloudSyncEnabled = Bundle.main.object(forInfoDictionaryKey: "SailCloudSyncEnabled") as? String == "YES"
         macTabs = MacTabsStore(
-            directories: directories, container: CKContainer.default())
+            directories: directories, container: cloudSyncEnabled ? CKContainer.default() : nil)
 
         haptics.keepsWarm = { [unowned energy] in !energy.isReduced }
         favicons.allowsNetwork = { [unowned energy] in !energy.isReduced }

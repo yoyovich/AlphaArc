@@ -1,0 +1,16 @@
+# Device build for personal signing; no CloudKit or default-browser capability is required.
+include:
+  - fork.yml
+settings:
+  base:
+    SAIL_CLOUD_SYNC: "NO"
+targets:
+  SailBrowser:
+    info:
+      properties:
+        CFBundleName: AlphaArc
+        CFBundleDisplayName: AlphaArc
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.yoyovich.alphaarc
+        CODE_SIGN_ENTITLEMENTS: SailBrowser/SailBrowser-Local.entitlements

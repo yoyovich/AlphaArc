@@ -32,14 +32,14 @@ nonisolated struct MacTabsCache: Codable, Sendable {
     var sheetCurrent: String?
     var sheetPage: String?
     private var cache: MacTabsCache
-    @ObservationIgnored private let container: CKContainer
+    @ObservationIgnored private let container: CKContainer?
     @ObservationIgnored private let writer: DebouncedWriter<MacTabsCache>
     @ObservationIgnored private var fetching: Task<Void, Never>?
     @ObservationIgnored private var observer: (any NSObjectProtocol)?
 
-    init(directories: AppDirectories, container: CKContainer) {
+    init(directories: AppDirectories, container: CKContainer?) {
         let fileURL = directories.support.appending(path: "mac-tabs.json")
-        cache = JSONFile.load(MacTabsCache.self, from: fileURL) ?? MacTabsCache()
+        cache = container == nil ? MacTabsCache() : (JSONFile.load(MacTabsCache.self, from: fileURL) ?? MacTabsCache())
         writer = DebouncedWriter(fileURL: fileURL)
         self.container = container
         observer = NotificationCenter.default.addObserver(forName: .CKAccountChanged, object: nil, queue: .main) {
@@ -78,6 +78,7 @@ nonisolated struct MacTabsCache: Codable, Sendable {
 
     // A different account than the cache's starts from an empty cache, so its subscription is saved again.
     func start() async {
+        guard let container else { return }
         let user: String
         do {
             user = try await container.userRecordID().recordName
@@ -98,6 +99,7 @@ nonisolated struct MacTabsCache: Codable, Sendable {
 
     // A call made while a fetch runs waits for that one.
     func fetch() async {
+        guard container != nil else { return }
         if let fetching {
             await fetching.value
             return
@@ -113,6 +115,7 @@ nonisolated struct MacTabsCache: Codable, Sendable {
     }
 
     private func subscribe() async {
+        guard let container else { return }
         let subscription = CKDatabaseSubscription(subscriptionID: "mac-tabs")
         subscription.recordType = "Device"
         let info = CKSubscription.NotificationInfo()
@@ -128,6 +131,7 @@ nonisolated struct MacTabsCache: Codable, Sendable {
     }
 
     private func fetchChanges() async {
+        guard let container else { return }
         do {
             let status = try await container.accountStatus()
             guard status == .available else {
@@ -161,6 +165,7 @@ nonisolated struct MacTabsCache: Codable, Sendable {
 
     // Without a token the server sends every record and no deletions, so the result replaces the cache.
     private func fetchZone() async throws {
+        guard let container else { return }
         let database = container.privateCloudDatabase
         var token = try cache.token.flatMap {
             try NSKeyedUnarchiver.unarchivedObject(ofClass: CKServerChangeToken.self, from: $0)

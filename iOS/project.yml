@@ -5,6 +5,7 @@ options:
     iOS: "26.0"
 settings:
   base:
+    SAIL_CLOUD_SYNC: YES
     SAIL_ICLOUD_CONTAINER: iCloud.com.harunkkhan.browser
     SWIFT_VERSION: "6.0"
     SWIFT_DEFAULT_ACTOR_ISOLATION: MainActor
@@ -31,6 +32,7 @@ targets:
           NSAllowsArbitraryLoadsInWebContent: true
         UIFileSharingEnabled: true
         LSSupportsOpeningDocumentsInPlace: true
+        SailCloudSyncEnabled: $(SAIL_CLOUD_SYNC)
         SailfishDefaultBrowser: $(SAIL_DEFAULT_BROWSER)
         CFBundleName: Sailfish
         CFBundleDisplayName: Sail

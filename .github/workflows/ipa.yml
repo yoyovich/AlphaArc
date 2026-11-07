@@ -1,0 +1,33 @@
+name: Build IPA
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: device-ipa
+  cancel-in-progress: false
+jobs:
+  build:
+    runs-on: macos-26
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Select Xcode
+        run: sudo xcode-select -s /Applications/Xcode_26.5.app
+      - name: Install XcodeGen
+        run: |
+          curl -fsSL -o "$RUNNER_TEMP/xcodegen.zip" https://github.com/yonaskolb/XcodeGen/releases/download/2.46.0/xcodegen.zip
+          echo "4d9e34b62172d645eed6457cac13fc222569974098ef4ee9c3368bedf0196806  $RUNNER_TEMP/xcodegen.zip" | shasum -a 256 -c -
+          unzip -q "$RUNNER_TEMP/xcodegen.zip" -d "$RUNNER_TEMP"
+          echo "$RUNNER_TEMP/xcodegen/bin" >> "$GITHUB_PATH"
+      - name: Build and verify unsigned iPhone IPA
+        env:
+          CURRENT_PROJECT_VERSION: ${{ github.run_number }}
+        run: iOS/scripts/package-unsigned.sh
+      - name: Upload IPA for personal signing
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: AlphaArc-unsigned-iphoneos
+          path: iOS/.build/Unsigned/AlphaArc-unsigned.ipa
+          if-no-files-found: error
+          retention-days: 30
