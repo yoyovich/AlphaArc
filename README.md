@@ -1,3 +1,7 @@
+# AlphaArc
+
+Personal derivative of [Sail for iOS](https://github.com/SailfishBrowser/iOS), with necessary-cookie automation, dark websites and Russian localization. Original authors and Apache-2.0 attribution are retained below.
+
 > **Personal Sail fork (source only):** necessary-only cookie choices, site cookie management,
 > forced dark websites, and Russian localization. See [FEATURES.md](FEATURES.md),
 > [FORK.md](FORK.md), and [VERIFICATION.md](VERIFICATION.md).

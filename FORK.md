@@ -24,19 +24,22 @@
 
 ## Удалённый репозиторий
 
-Создание форка через GitHub API завершилось `403 Resource not accessible by integration`.
-Удалённый форк не создан и ветка не опубликована.
+Репозиторий владельца: https://github.com/yoyovich/AlphaArc.
+Он создан владельцем отдельно; это производная Sail с сохранённой историей,
+а не репозиторий, отмеченный GitHub как fork. Начальный коммит AlphaArc сохранён
+слиянием историй. Исходный Sail подключён как `upstream`, AlphaArc — как `origin`.
 
-Открыть https://github.com/SailfishBrowser/iOS/fork под yoyovich и выбрать имя `sail`.
-Затем из каталога локальной копии:
+Ранее автоматическое создание форка блокировалось ответом GitHub API
+`403 Resource not accessible by integration`. Для предоставленного AlphaArc
+права на запись подтверждены. Готовая версия предназначена для ветки `main`.
 
 ```sh
-git remote add origin https://github.com/yoyovich/sail.git
-git push -u origin fork/yoyovich
+git clone https://github.com/yoyovich/AlphaArc.git
+cd AlphaArc
 ```
 
-Исходный репозиторий подключён как `upstream`. Workflow появятся после push;
-локальные проверки не означают, что GitHub Actions уже запускались.
+Workflow тестирования запускаются при push в main и pull requests. Release workflow
+потребует отдельной настройки Apple и TestFlight; он не включается автоматически.
 
 ## Сборка на Mac
 
