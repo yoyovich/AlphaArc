@@ -286,6 +286,8 @@ struct SavedStateFixtureTests {
         settings.blocksAds = false
         settings.blocksTrackers = false
         settings.blocksCookieBanners = false
+        settings.automaticallyHandlesCookies = false
+        settings.forcesDarkWebsites = false
         settings.zoomByHost = ["a.test": 1.5]
         settings.displayOptionsExpanded = false
         settings.opensAppLinksInApp = false
@@ -301,7 +303,10 @@ struct SavedStateFixtureTests {
         // Every site-settings.json has carried both since the file shipped. Camera and microphone came later.
         let required: Set = ["blocksTrackers", "allowsJavaScript"]
         try expectEveryKeyDecodes(
-            SiteSettings(blocksTrackers: false, allowsJavaScript: false, camera: .allow, microphone: .deny),
+            SiteSettings(
+                blocksTrackers: false, allowsJavaScript: false,
+                allowsCookieAutomation: false, allowsForcedDark: false,
+                camera: .allow, microphone: .deny),
             required: required,
             defaults: Self.defaults(SiteSettings(), except: required))
     }
